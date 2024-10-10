@@ -1,5 +1,4 @@
-const { PrismaClient } = require("@prisma/client");
-const prisma = new PrismaClient();
+const prisma = require("../libs/prisma");
 
 const handleFacebookAuth = async (accessToken, refreshToken, profile, done) => {
   console.log("Facebook profile: ", profile);
@@ -13,7 +12,7 @@ const handleFacebookAuth = async (accessToken, refreshToken, profile, done) => {
     });
 
     if (existingUser) {
-        return done(null, false);
+      return done(null, false);
     }
 
     // Jika pengguna belum ada, buat pengguna baru

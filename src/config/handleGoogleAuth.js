@@ -1,5 +1,4 @@
-const { PrismaClient } = require("@prisma/client");
-const prisma = new PrismaClient();
+const prisma = require("../libs/prisma");
 
 const handleGoogleAuth = async (accessToken, refreshToken, profile, done) => {
   // console.log("Google profile: ", profile);
@@ -12,14 +11,18 @@ const handleGoogleAuth = async (accessToken, refreshToken, profile, done) => {
     });
 
     if (existingUser) {
-        return done(null, false);
+      return done(null, false);
     }
 
+    const randomSuffix = Math.floor(Math.random() * 10000);
+    username = `user_${randomSuffix}`;
+    
     const newUser = await prisma.users.create({
       data: {
         id: profile.id,
         email: profile._json.email,
         nama: profile.displayName,
+        username: username,
       },
     });
 

@@ -1,8 +1,9 @@
 const express = require("express");
 const session = require("express-session");
 const passport = require("passport");
-const googleRouter = require("./src/controllers/googleAuth");
-const facebookRouter = require("./src/controllers/facebookAuth");
+const googleRouter = require("./src/controllers/auth/googleAuth");
+const facebookRouter = require("./src/controllers/auth/facebookAuth");
+const loginRegister = require("./src/controllers/auth/loginRegisterAuth");
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 const app = express();
@@ -19,7 +20,6 @@ app.use(
     saveUninitialized: false,
   })
 );
-
 app.use(express.json());
 app.use(passport.initialize());
 app.use(passport.session());
@@ -37,17 +37,19 @@ passport.deserializeUser(async (id, done) => {
   }
 });
 
-app.get("/", (req, res, next) => {
+app.get("/", (req, res) => {
   if (!req.isAuthenticated()) {
     return res.render("register");
-  }else{
+  } else {
     return res.redirect("/auth/profile");
   }
-});
+}); // dapat diubah agar ketika sudah login akan menampilkan halaman home untuk user yang login
 
+// Login OAuth
+app.use(loginRegister);
 app.use("/auth", googleRouter);
 app.use("/auth", facebookRouter);
 
 app.listen(port, () => {
-  console.log(`Server listening on port ${port}`);
+  console.log(`Server listening on port ${port}: http://localhost:${port}`);
 });

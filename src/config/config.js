@@ -1,0 +1,14 @@
+require("dotenv").config();
+
+exports.module = {
+  SESSION_SECRET_KEY: process.env.SESSION_SECRET_KEY,
+  PORT: process.env.PORT,
+  JWT_SECRET: process.env.JWT_SECRET,
+  JWT_EXPIRED: process.env.JWT_EXPIRED_IN,
+  GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
+  GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
+  FACEBOOK_APP_ID: process.env.FACEBOOK_APP_ID,
+  FACEBOOK_APP_SECRET: process.env.FACEBOOK_APP_SECRET,
+  GOOGLE_CALLBACK_URL: process.env.GOOGLE_CALLBACK_URL,
+  FACEBOOK_CALLBACK_URL: process.env.FACEBOOK_CALLBACK_URL,
+};

@@ -8,7 +8,9 @@ datasource db {
 }
 
 model users {
-  id    String  @unique(map: "id") @db.Char(100)
-  nama  String? @db.Char(100)
-  email String? @db.Char(100)
+  id       String  @unique(map: "id") @default(uuid()) @db.Char(100)
+  username String? @unique @db.Char(100)
+  email    String  @unique @db.Char(100)
+  nama     String  @db.Char(100)
+  password String? @default("") @db.Char(100)
 }

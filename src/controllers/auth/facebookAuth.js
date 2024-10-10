@@ -1,11 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const passport = require("passport");
-const GoogleStrategy = require("passport-google-oauth20").Strategy;
+const FacebookStrategy = require("passport-facebook").Strategy;
 const {
-  handleGoogleAuth,
+  handleFacebookAuth,
   deletedAccount,
-} = require("../config/handleGoogleAuth");
+} = require("../../config/handleFacebookAuth");
 const { PrismaClient } = require("@prisma/client");
 
 const prisma = new PrismaClient();
@@ -13,24 +13,24 @@ const prisma = new PrismaClient();
 require("dotenv").config();
 
 passport.use(
-  new GoogleStrategy(
+  new FacebookStrategy(
     {
-      clientID: process.env.CLIENT_ID,
-      clientSecret: process.env.CLIENT_SECRET_KEY,
-      callbackURL: process.env.CALLBACK_URL,
+      clientID: process.env.CLIENT_ID_FACEBOOK,
+      clientSecret: process.env.CLIENT_SECRET_KEY_FACEBOOK,
+      callbackURL: process.env.CALLBACK_URL_FACEBOOK,
     },
-    handleGoogleAuth
+    handleFacebookAuth
   )
 );
 
 router.get(
-  "/google",
-  passport.authenticate("google", { scope: ["profile", "email"] })
+  "/facebook",
+  passport.authenticate("facebook", { scope: ["public_profile", "email"] })
 );
 
 router.get(
-  "/callback",
-  passport.authenticate("google", {
+  "/facebook/callback",
+  passport.authenticate("facebook", {
     successRedirect: "/auth/profile",
     failureRedirect: "/",
   })
@@ -38,11 +38,10 @@ router.get(
 
 router.get("/profile", (req, res, next) => {
   if (!req.isAuthenticated()) {
-    return res.redirect("/auth/google");
+    return res.redirect("/auth/facebook");
   }
   res.render("profile", {
     nama: req.user.nama,
-    email: req.user.email,
     id: req.user.id,
   });
 });
